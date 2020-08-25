@@ -1,3 +1,10 @@
+#!/usr/bin/python3
+"""
+Randomly sample transcriptions with sound.
+
+Author: Þorsteinn Daði Gunnarsson
+"""
+
 import argparse
 import csv
 import os
@@ -15,6 +22,15 @@ PLAY_CMD = os.getenv(
 
 
 def read_from_file(fname, header=True):
+    """Get csv reader.
+
+    Args: 
+        fname: name of file
+        header: whether or not the file has a header
+
+    Returns:
+        List of rows as dict or list
+    """
     with open(fname) as fin:
         delimiter = "," if fname.endswith(".csv") else "\t"
         if header:
@@ -25,17 +41,26 @@ def read_from_file(fname, header=True):
 
 
 def parse_time(stamp):
-    """
-    Accepts time in format HH:MM:SS:XXX
-    and returns the time in whole seconds
+    """Read time in seconds from HH:MM:SS:XXX.
+
+    Args: 
+        stamp: timestamp string
+
+    Returns:
+        Time in seconds
     """
     hours, minutes, seconds, _ = stamp.split(":")
     return int(hours) * 60 * 60 + int(minutes) * 60 + int(seconds)
 
 
 def print_time(sec):
-    """
-    Prints out time in HH:MM:SS.XXX format from seconds
+    """Format time from seconds to ffmpeg-utils format (HH:MM:SS.mmm).
+
+    Args:
+        sec: time in seconds
+
+    Returns:
+        Time in ffmpeg-utils format
     """
     hours, minutes, seconds = int(sec / 3600), int((sec % 3600) / 60), int(sec % 60)
     return f"{hours:02d}:{minutes:02d}:{seconds:02d}.000"
@@ -50,6 +75,7 @@ def play(
     column_end=None,
     convert=True,
 ):
+    """Play audio file."""
     start = parse_time(row[column_start]) if column_start else None
     stop = parse_time(row[column_end]) if column_end else None
     duration = stop - start if start and stop else None
@@ -71,7 +97,7 @@ def play(
                     duration=duration,
                     start_f=start_f,
                     stop_f=stop_f,
-                    duration_f=duartion_f,
+                    duration_f=duration_f,
                     output=output,
                 )
             ],
@@ -98,6 +124,7 @@ def play(
 
 
 def main():
+    """Randomly sample transcriptions with sound from file."""
     parser = argparse.ArgumentParser(
         description="Randomly sample transcriptions with sound."
     )
