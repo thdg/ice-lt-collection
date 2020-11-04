@@ -9,6 +9,8 @@ def normalize(transcription):
         .replace("OJ", "ó djey")\
         .replace("EmJ", "em djay")\
         .replace("ÁM", "Á M")\
+        .replace(" , ", " ")\
+        .replace(",, ", " ")\
         .replace(", ", " ")\
         .replace(",", " ")\
         .replace(".", "")\
@@ -27,6 +29,7 @@ def normalize(transcription):
         .replace(" – ", " ")\
         .replace("–", " ")\
         .replace(";", "")\
+        .replace("  ", " ")\
         .lower()
     return transcription + "\n"
 

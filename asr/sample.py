@@ -110,7 +110,7 @@ def play(
     subprocess.run(
         [
             PLAY_CMD.format(
-                output=output,
+                output=output+".wav",
                 start=start,
                 stop=stop,
                 duration=duration,
